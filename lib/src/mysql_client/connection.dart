@@ -1438,25 +1438,24 @@ class EmptyResultSet extends IResultSet {
 
 /// Represents result set row data
 class ResultSetRow {
-  final List<MySQLColumnDefinitionPacket> _colDefs;
-  final List<String?> _values;
+  final List<MySQLColumnDefinitionPacket> colDefs;
+  final List<String?> values;
 
   ResultSetRow._({
-    required List<MySQLColumnDefinitionPacket> colDefs,
-    required List<String?> values,
-  })  : _colDefs = colDefs,
-        _values = values;
+    required this.colDefs,
+    required this.values,
+  });
 
   /// Get number of columns for this row
-  int get numOfColumns => _colDefs.length;
+  int get numOfColumns => colDefs.length;
 
   /// Get column data by column index (starting form 0)
   String? colAt(int colIndex) {
-    if (colIndex >= _values.length) {
+    if (colIndex >= values.length) {
       throw MySQLClientException("Column index is out of range");
     }
 
-    final value = _values[colIndex];
+    final value = values[colIndex];
 
     return value;
   }
@@ -1469,7 +1468,7 @@ class ResultSetRow {
   /// Throws [MySQLClientException] if conversion is not possible
   T? typedColAt<T>(int colIndex) {
     final value = colAt(colIndex);
-    final colDef = _colDefs[colIndex];
+    final colDef = colDefs[colIndex];
 
     return colDef.type
         .convertStringValueToProvidedType<T>(value, colDef.columnLength);
@@ -1477,7 +1476,7 @@ class ResultSetRow {
 
   /// Get column data by column name
   String? colByName(String columnName) {
-    final colIndex = _colDefs.indexWhere(
+    final colIndex = colDefs.indexWhere(
       (element) => element.name.toLowerCase() == columnName.toLowerCase(),
     );
 
@@ -1485,11 +1484,11 @@ class ResultSetRow {
       throw MySQLClientException("There is no column with name: $columnName");
     }
 
-    if (colIndex >= _values.length) {
+    if (colIndex >= values.length) {
       throw MySQLClientException("Column index is out of range");
     }
 
-    final value = _values[colIndex];
+    final value = values[colIndex];
 
     return value;
   }
@@ -1503,11 +1502,11 @@ class ResultSetRow {
   T? typedColByName<T>(String columnName) {
     final value = colByName(columnName);
 
-    final colIndex = _colDefs.indexWhere(
+    final colIndex = colDefs.indexWhere(
       (element) => element.name.toLowerCase() == columnName.toLowerCase(),
     );
 
-    final colDef = _colDefs[colIndex];
+    final colDef = colDefs[colIndex];
 
     return colDef.type
         .convertStringValueToProvidedType<T>(value, colDef.columnLength);
@@ -1519,8 +1518,8 @@ class ResultSetRow {
 
     int colIndex = 0;
 
-    for (final colDef in _colDefs) {
-      result[colDef.name] = _values[colIndex];
+    for (final colDef in colDefs) {
+      result[colDef.name] = values[colIndex];
       colIndex++;
     }
 
@@ -1533,8 +1532,8 @@ class ResultSetRow {
 
     int colIndex = 0;
 
-    for (final colDef in _colDefs) {
-      final value = _values[colIndex];
+    for (final colDef in colDefs) {
+      final value = values[colIndex];
 
       if (value == null) {
         result[colDef.name] = null;
