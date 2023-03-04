@@ -457,7 +457,7 @@ class MySQLConnection {
 
     if (params != null && params.isNotEmpty) {
       try {
-        query = _substitureParams(query, params);
+        query = substituteParams(query, params);
       } catch (e) {
         _state = _MySQLConnectionState.connectionEstablished;
         rethrow;
@@ -662,7 +662,7 @@ class MySQLConnection {
     }
   }
 
-  String _substitureParams(String query, Map<String, dynamic> params) {
+  String substituteParams(String query, Map<String, dynamic> params) {
     // convert params to string
     Map<String, String> convertedParams = {};
 
