@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:mysql_client/mysql_protocol.dart';
 import 'package:mysql_client/mysql_protocol_extension.dart';
 
@@ -112,5 +113,21 @@ class MySQLPacketInitialHandshake extends MySQLPacketPayload {
   @override
   Uint8List encode() {
     throw UnimplementedError();
+  }
+
+  @override
+  String toString() {
+    return """
+MySQLPacketInitialHandshake:
+authPluginDataPart1: $authPluginDataPart1,
+authPluginDataPart2: $authPluginDataPart2,
+authPluginName: $authPluginName,
+capabilityFlags: $capabilityFlags,
+charset: $charset,
+connectionID: $connectionID,
+protocolVersion: $protocolVersion,
+serverVersion: $serverVersion,
+statusFlags: $statusFlags
+""";
   }
 }
